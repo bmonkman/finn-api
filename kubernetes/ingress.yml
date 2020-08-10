@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-service
+  annotations:
+    # nginx ingress
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # cert-manager
+    ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: clusterissuer-letsencrypt-production
+    # external-dns
+    external-dns.alpha.kubernetes.io/hostname: finntest.commitzero.com
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://petstore.swagger.io"
+
+spec:
+  rules:
+  - host: finntest.commitzero.com
+    http:
+      paths:
+        - path: /(.*)
+          backend:
+            serviceName: api-service
+            servicePort: http
+  tls:
+  - hosts:
+    - finntest.commitzero.com
+    secretName: finntest-tls-secret
