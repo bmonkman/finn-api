@@ -9,6 +9,7 @@
 
 !application
 application/*
+!application/.openapi-generator-ignore
 !application/db
 !application/services
 !application/package.json

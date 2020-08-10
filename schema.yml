@@ -3,7 +3,7 @@ info:
   version: 1.0.0
   title: Finn.ai Challenge
 servers:
-  - url: http://finn.commitdev.com/v1
+  - url: https://finntest.commitzero.com/v1
 paths:
   /ID:
     post:
@@ -83,6 +83,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /status/alive:
+    get:
+      summary: Kubernetes liveness check
+      operationId: livenessCheck
+      tags:
+        - status
+      responses:
+        '200':
+          description: Expected response to a valid request
+
+  /status/ready:
+    get:
+      summary: Kubernetes readiness check
+      operationId: readinessCheck
+      tags:
+        - status
+      responses:
+        '200':
+          description: Expected response to a valid request
 
 components:
   schemas:

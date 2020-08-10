@@ -9,6 +9,7 @@ RUN apk add --no-cache ca-certificates tini sqlite
 WORKDIR /app
 COPY --from=builder /app .
 COPY application/package.json .
+COPY application/config.js .
 COPY application/services services/
 COPY application/db db/
 RUN npm install
