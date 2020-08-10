@@ -11,6 +11,9 @@
 application/*
 !application/.openapi-generator-ignore
 !application/db
-!application/services
 !application/package.json
 !application/package-lock.json
+
+!application/services
+application/services/*
+!application/services/User*
