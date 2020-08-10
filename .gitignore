@@ -1,0 +1,15 @@
+/*
+!.gitignore
+
+!README.md
+!Makefile
+!schema.yml
+!Dockerfile
+!kubernetes
+
+!application
+application/*
+!application/db
+!application/services
+!application/package.json
+!application/package-lock.json
