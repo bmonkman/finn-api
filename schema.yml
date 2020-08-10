@@ -7,7 +7,7 @@ servers:
 paths:
   /ID:
     post:
-      summary: Create a new UUID
+      summary: Create a new UUID. This is a POST rather than GET as requested, as it is creating a new ID which could be a non-idempotent operation, so may not make sense as a GET.
       operationId: createID
       tags:
         - users

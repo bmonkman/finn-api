@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-ui
+spec:
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: swagger-ui
+  template:
+    metadata:
+      labels:
+        app: swagger-ui
+    spec:
+      containers:
+        - name: swagger-ui
+          image: swaggerapi/swagger-ui
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 0.01
+            limits:
+              memory: 128Mi
+              cpu: 0.5
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+          - name: SWAGGER_JSON_URL
+            value: "https://finntest.commitzero.com/openapi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-ui
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http
+  selector:
+    app: swagger-ui
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: swagger-ui
+  annotations:
+    # nginx ingress
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # cert-manager
+    ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: clusterissuer-letsencrypt-production
+    # external-dns
+    external-dns.alpha.kubernetes.io/hostname: finn-apidocs.commitzero.com
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://finntest.commitzero.com"
+
+spec:
+  rules:
+  - host: finn-apidocs.commitzero.com
+    http:
+      paths:
+        - path: /(.*)
+          backend:
+            serviceName: swagger-ui
+            servicePort: http
+  tls:
+  - hosts:
+    - finn-apidocs.commitzero.com
+    secretName: finnapidocs-tls-secret
+

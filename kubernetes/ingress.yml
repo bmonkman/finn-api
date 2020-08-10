@@ -13,7 +13,7 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: finntest.commitzero.com
     # CORS
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://petstore.swagger.io"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://finn-apidocs.commitzero.com"
 
 spec:
   rules:
