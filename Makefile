@@ -2,7 +2,7 @@ OPENAPI_GENERATOR_VERSION=v5.0.0-beta
 DOCKER_IMAGE?=finn-api:latest
 generate:
 	docker run -v ${PWD}:/tmp/ openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} generate -i /tmp/schema.yml -g nodejs-express-server -o /tmp/application
-	npm install --save sqlite3 uuid
+	npm install --save sqlite3 uuid --prefix application/
 
 run:
 	npm start --prefix application/

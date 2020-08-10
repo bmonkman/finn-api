@@ -44,16 +44,3 @@ spec:
             value: "80"
           - name: SERVER_HOST
             value: "0.0.0.0"
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: api-service
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: api-service
-  maxReplicas: 2
-  minReplicas: 1
-  targetCPUUtilizationPercentage: 60
