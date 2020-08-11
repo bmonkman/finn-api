@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-service
+  name: user-service
 spec:
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: api-service
+      app: user-service
   template:
     metadata:
       labels:
-        app: api-service
+        app: user-service
     spec:
       containers:
-        - name: api-service
+        - name: user-service
           image: bmonkman/finn-api:latest
           resources:
             requests:

@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Finn.ai Challenge
+  title: Finn User API
 servers:
   - url: https://finntest.commitzero.com/v1
 paths:
@@ -110,12 +110,16 @@ components:
       required:
         - id
         - name
+        - tone
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
+        tone:
+          type: string
+          enum: [humorous, ironic, cynical]
     UpdateUser:
       required:
         - name

@@ -5,7 +5,7 @@ RUN docker-entrypoint.sh generate -i schema.yml -g nodejs-express-server -o /app
 
 # Run stage - for running the app
 FROM node:14.7.0-alpine
-RUN apk add --no-cache ca-certificates tini sqlite
+RUN apk add --no-cache ca-certificates tini sqlite git
 WORKDIR /app
 COPY --from=builder /app .
 COPY application/package.json .

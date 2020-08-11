@@ -3,6 +3,7 @@ const Service = require('./Service');
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db');
 const SimulateFail = require('../db/SimulateFail');
+const toneClient = require('finn-tone-api');
 
 /**
 * Create a new UUID
@@ -76,7 +77,19 @@ const loadUserById = ({ userId }) => new Promise(
           if (row == undefined) {
             reject(Service.rejectResponse({'error':'User not found'}, 404));
           } else {
-            resolve(Service.successResponse(row));
+            // Make a call to the tone service to get tone for the user
+            // Should be configured to call the tone service internally via k8s DNS rather than out through the public internet
+            var api = new toneClient.ToneApi();
+            api.loadToneByUserId(row.id, (error, data, response) =>{
+              if (error) {
+                // Opt for partial failure here
+                resolve(Service.successResponse(row));
+              } else {
+                row.tone = response.body.tone;
+                resolve(Service.successResponse(row));
+              }
+            });
+
           }
         }
       });

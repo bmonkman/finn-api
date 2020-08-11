@@ -1,6 +1,10 @@
-jest.mock('../db/SimulateFail.js')
-const service = require('./UsersService.js');
+jest.mock('finn-tone-api');
+const {ToneApi} = require('finn-tone-api');
+
+jest.mock('../db/SimulateFail.js');
 const SimulateFail = require('../db/SimulateFail.js');
+
+const service = require('./UsersService.js');
 const db = require('../db');
 const { v4: uuidv4 } = require('uuid');
 
@@ -43,8 +47,12 @@ describe('createUser', () => {
   });
 });
 
-describe('createUser', () => {
+describe('loadUserById', () => {
   test('should return HTTP 200', async done => {
+
+    // Mock the api call - kinda gross.
+    ToneApi.mockImplementation(() => {return {loadToneByUserId:(id, func) => func(undefined,undefined, {body:{}}) }});
+
     expect.assertions(2);
     var newId = uuidv4()
     db.run('INSERT INTO user (id, name) VALUES (?,?)', [newId, "testUser"],

@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: api-service
+  name: user-service
   annotations:
     # nginx ingress
     kubernetes.io/ingress.class: nginx
@@ -22,7 +22,7 @@ spec:
       paths:
         - path: /(.*)
           backend:
-            serviceName: api-service
+            serviceName: user-service
             servicePort: http
   tls:
   - hosts:
