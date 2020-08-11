@@ -30,38 +30,33 @@ describe('createUser', () => {
     return expect(service.createUser({ updateUser: {name: "testUser" }})).rejects.toMatchObject({code: 500});
   });
 
-  test('should create a user', () => {
+  test('should create a user', done => {
     SimulateFail.shouldFail.mockImplementation(() => false);
     expect.assertions(2);
-    return new Promise(resolve => {
-      service.createUser({ updateUser: { name: "testUser" } }).then(result => {
-        db.get("select * from user where id = ?", [result.payload.id], (err, row) => {
-          expect(err).toBeNull();
-          expect(row).toMatchObject({ name: "testUser" });
-          resolve();
-        });
+    service.createUser({ updateUser: { name: "testUser" } }).then(result => {
+      db.get("select * from user where id = ?", [result.payload.id], (err, row) => {
+        expect(err).toBeNull();
+        expect(row).toMatchObject({ name: "testUser" });
+        done();
       });
     });
   });
 });
 
 describe('createUser', () => {
-  test('should return HTTP 200', () => {
-    expect.assertions(1);
+  test('should return HTTP 200', async done => {
+    expect.assertions(2);
     var newId = uuidv4()
-    return new Promise(resolve => {
-      db.run('INSERT INTO user (id, name) VALUES (?,?)', [newId, "testUser"],
-      function (err, result) {
-        expect.assertions(1);
-        expect(err).toBeNull();
-        expect(service.loadUserById({userId:newId})).resolves.toMatchObject({code: 200});
-        resolve();
-      });
+    db.run('INSERT INTO user (id, name) VALUES (?,?)', [newId, "testUser"],
+    async (err, result) => {
+      expect(err).toBeNull();
+      await expect(service.loadUserById({userId:newId})).resolves.toMatchObject({code: 200});
+      done();
     });
   });
 
   test('should return HTTP 404 when user does not exist', () => {
-    // expect.assertions(1);
+    expect.assertions(1);
     return expect(service.loadUserById("doesNotExist")).rejects.toMatchObject({code: 404});
   });
 });
