@@ -8,8 +8,7 @@ FROM node:14.7.0-alpine
 RUN apk add --no-cache ca-certificates tini sqlite git
 WORKDIR /app
 COPY --from=builder /app .
-COPY application/package.json .
-COPY application/config.js .
+COPY application/package.json application/config.js ./
 COPY application/services services/
 COPY application/db db/
 RUN npm install
